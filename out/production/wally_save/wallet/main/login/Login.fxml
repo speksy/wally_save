@@ -41,7 +41,7 @@
       </VBox>
       <Label fx:id="isConnected" alignment="CENTER" layoutX="103.0" layoutY="254.0" prefHeight="27.0" prefWidth="405.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" styleClass="login-status" text="Please enter username and password" textFill="RED">
          <font>
-            <Font name="Verdana" size="13.0" />
+            <Font name="Verdana" size="15.0" />
          </font>
       </Label>
       <Button layoutX="170.0" layoutY="304.0" mnemonicParsing="false" onAction="#LoginAction" prefHeight="28.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-radius: 50; -fx-background-insets: 0, 1; -fx-text-fill: black; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Login">

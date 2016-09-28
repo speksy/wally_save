@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,7 +67,7 @@ public class CategoriesController implements Initializable {
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatement2 = null;
         String superCategoryQuery = "INSERT INTO t_categories (category_name) VALUES (?)";
-        String subCategoryQuery = "INSERT INTO t_cat_reg (name) VALUES (?)";
+        String subCategoryQuery = "INSERT INTO t_cat_reg (name,user) VALUES (?)";
         try {
             preparedStatement = categoriesModel.connection.prepareStatement(superCategoryQuery);
             preparedStatement2 = categoriesModel.connection.prepareStatement(subCategoryQuery);
@@ -170,7 +169,7 @@ public class CategoriesController implements Initializable {
             });
 
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             System.out.println("Error on Building Data");
         }
     return categories;
