@@ -1,0 +1,8 @@
+.anchor {
+    -fx-background-image:url('backgr.jpg');
+    -fx-background-size: cover;
+}
+.logo-image {
+    -fx-background-image: url('logo.png');
+    -fx-background-size: cover;
+}

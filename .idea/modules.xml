@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Wallet.iml" filepath="$PROJECT_DIR$/Wallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wally_save.iml" filepath="$PROJECT_DIR$/wally_save.iml" />
     </modules>
   </component>
 </project>
