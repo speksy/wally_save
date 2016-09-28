@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" styleClass="anchor" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallet.main.login.LoginController">
+<AnchorPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" styleClass="login-anchor" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallet.main.login.LoginController">
    <children>
       <VBox alignment="CENTER" layoutX="149.0" layoutY="130.0" prefHeight="124.0" prefWidth="314.0">
          <children>
@@ -39,9 +39,9 @@
             <Insets top="20.0" />
          </padding>
       </VBox>
-      <Label fx:id="isConnected" alignment="CENTER" layoutX="93.0" layoutY="254.0" prefHeight="27.0" prefWidth="414.0" style="-fx-background-color: rgba(255, 255, 255, 0.4); -fx-background-radius: 10;" styleClass="login-status" text="Please enter username and password">
+      <Label fx:id="isConnected" alignment="CENTER" layoutX="103.0" layoutY="254.0" prefHeight="27.0" prefWidth="405.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" styleClass="login-status" text="Please enter username and password" textFill="RED">
          <font>
-            <Font name="Verdana" size="13.0" />
+            <Font name="Verdana" size="15.0" />
          </font>
       </Label>
       <Button layoutX="170.0" layoutY="304.0" mnemonicParsing="false" onAction="#LoginAction" prefHeight="28.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-radius: 50; -fx-background-insets: 0, 1; -fx-text-fill: black; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Login">
@@ -60,9 +60,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="logoLabel" alignment="CENTER" layoutX="201.0" layoutY="54.0" prefHeight="48.0" prefWidth="187.0" style="-fx-background-color: transparent; -fx-background-color: #3fbcff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Wally Save">
+      <Label fx:id="logoLabel" alignment="CENTER" layoutX="168.0" layoutY="54.0" prefHeight="48.0" prefWidth="274.0" style="-fx-background-color: #3fbcff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Wally Save">
          <font>
-            <Font name="Verdana" size="30.0" />
+            <Font name="Narkisim" size="30.0" />
          </font>
       </Label>
    </children>
