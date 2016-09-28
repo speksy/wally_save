@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.HBox?>
+<HBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1">
+    <style>
+        @import 'https://fonts.googleapis.com/css?family=Lato';
+    </style>
+    <stylesheets>
+    <URL value="@WallyHome.css" />
+</stylesheets>
+</HBox>

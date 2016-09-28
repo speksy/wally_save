@@ -1,0 +1,12 @@
+.vbox-main{
+    -fx-background-image: url('backgr.jpg');
+    -fx-background-size: cover;
+}
+.scroll-pane-TL{
+    -fx-background-color: transparent;
+}
+.
+.tableView .column-header.amount .label{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
