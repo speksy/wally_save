@@ -3,37 +3,35 @@ package wallet.main.login;
 /**
  * Created by sveto on 9/28/2016.
  */
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
     private String name;
-    private double amount;
+    private String amount;
     private String description;
     private List<String> purchases;
     private List<String> charges;
-
 
     public Category() {
         purchases = new ArrayList<>();
         charges = new ArrayList<>();
         this.name = "";
-        this.amount = 0.0;
+        this.amount = "";
         this.description = "No Description";
     }
-    public Category(double amount) {
+
+    public Category(String amount) {
         this.amount = amount;
     }
-    public Category(String name, double amount) {
+
+    public Category(String name, String amount) {
         this.name = name;
         this.amount = amount;
     }
-    public Category(double amount, String description) {
-        this.amount = amount;
-        this.description = description;
-    }
 
-    public Category(String name, double amount, String description) {
+    public Category(String name, String amount, String description) {
         this.name = name;
         this.amount = amount;
         this.description = description;
@@ -71,11 +69,11 @@ public class Category {
         this.description = description;
     }
 
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

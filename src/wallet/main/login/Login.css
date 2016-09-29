@@ -6,3 +6,7 @@
     -fx-background-image: url('logo.png');
     -fx-background-size: cover;
 }
+
+.logo-text{
+    -fx-background-color: #3fbcff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);
+}

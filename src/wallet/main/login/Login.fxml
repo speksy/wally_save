@@ -60,7 +60,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="logoLabel" alignment="CENTER" layoutX="163.0" layoutY="59.0" prefHeight="48.0" prefWidth="274.0" style="-fx-background-color: #3fbcff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5); -fx-opacity: 0.5;" text="Wally $ave">
+      <Label fx:id="logoLabel" alignment="CENTER" layoutX="163.0" layoutY="59.0" prefHeight="48.0" prefWidth="274.0" styleClass="logo-text" text="Wally $ave">
          <font>
             <Font name="Verdana Bold" size="31.0" />
          </font>
