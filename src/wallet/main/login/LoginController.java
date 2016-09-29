@@ -42,11 +42,14 @@ public class LoginController implements Initializable{
     public void LoginAction()throws IOException{
         try {
             if (loginModel.isLogin(txtUsername.getText(),txtPassword.getText())){
-                FXMLLoader loader = new FXMLLoader();
                 Stage primaryStage = new Stage();
-                Parent root = loader.load(getClass().getResource("ComplexApplication_css.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Categories.fxml"));
+
+                Parent root = (Parent)fxmlLoader.load();
+                CategoriesController controller = fxmlLoader.<CategoriesController>getController();
+                controller.setUserToLabel(txtUsername.getText());
                 Scene scene = new Scene(root);
-                scene.getStylesheets().add(getClass().getResource("ComplexApplication.css").toExternalForm());
+                scene.getStylesheets().add(getClass().getResource("Categories.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.show();
             } else {

@@ -1,11 +1,20 @@
 package wallet.main.login;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -27,16 +36,202 @@ public class CategoriesController implements Initializable {
     @FXML
     private TextField addCategoryName;
     @FXML
-    private static Label userLbl;
+    private Label userLbl;
     @Override
+
     public void initialize(URL location, ResourceBundle resources) {
-        addButton.setOnMouseClicked(event -> categoriesModel.createParentCategory(addCategoryName.getText(), categoriesListView));
-        deleteButton.setOnMouseClicked(event -> categoriesModel.deleteParentCategory(categoriesListView));
-        categoriesModel.showUserParentCategories(categoriesListView);
-        categoriesModel.createTableWithColumns(tableView, columnAmount, columnDescription, categoriesListView);
+        showUserParentCategories();
+        addButton.setOnMouseClicked(event -> createParentCategory(addCategoryName.getText()));
+        deleteButton.setOnMouseClicked(event -> deleteParentCategory());
+        createTableWithColumns();
+    }
+    //Add new category
+    public void createParentCategory(String entry) {
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        String superCategoryQuery = "INSERT INTO t_categories (category_name, USER) VALUES (?,?)";
+        String subCategoryQuery = "INSERT INTO t_cat_reg (name,user) VALUES (?,?)";
+        try {
+            preparedStatement = categoriesModel.connection.prepareStatement(superCategoryQuery);
+            preparedStatement2 = categoriesModel.connection.prepareStatement(subCategoryQuery);
+            if (!categoriesModel.hasCategory(entry)) {
+                if (!entry.equals("")) {
+                    preparedStatement.setString(1, entry);
+                    preparedStatement.setString(2, getLoggedUsername());
+                    preparedStatement2.setString(1, entry);
+                    preparedStatement2.setString(2, getLoggedUsername());
+                } else {
+                    System.out.print("Empty category.");
+                }
+                preparedStatement.executeUpdate();
+                preparedStatement2.executeUpdate();
+
+
+                categoriesListView.getItems().clear();
+                showUserParentCategories();
+            } else {
+                System.out.println("Already exists.");
+            }
+        } catch (SQLException e) {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
-    public void GetUsername(String user) {
-       userLbl.setText("Hi " + user);
+    public void setUserToLabel(String user){
+        userLbl.setText(user);
     }
+
+    public String getLoggedUsername(){
+        return userLbl.getText();
+    }
+    //Delete category button clicked
+    public void deleteParentCategory() {
+        PreparedStatement preparedStatement;
+        String query = "DELETE category_name FROM t_categories where category_name = ? and user = ?";
+        String query2 = "DELETE name FROM t_cat_reg where name = ? and user = ?";
+        String selected = categoriesListView.getSelectionModel().getSelectedItem().toString();
+        try {
+            preparedStatement = categoriesModel.connection.prepareStatement(query);
+            preparedStatement.setString(1, selected);
+            preparedStatement.setString(2, getLoggedUsername());
+            preparedStatement.executeUpdate();
+            preparedStatement = categoriesModel.connection.prepareStatement(query2);
+            preparedStatement.setString(1, selected);
+            preparedStatement.setString(2, getLoggedUsername());
+
+            System.out.println("Selected" + selected);
+            preparedStatement.executeUpdate();
+
+            //Clear the list
+            categoriesListView.getItems().clear();
+            showUserParentCategories();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ObservableList<Category> getCategories(String value) {
+        ObservableList<Category> categories = FXCollections.observableArrayList();
+        ObservableList<String> data = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement;
+        ResultSet rs;
+        String query = "SELECT name,amount,desc from t_cat_reg where name = ? AND amount IS NOT NULL and user = ?";
+        String selected = value;
+        try {
+            preparedStatement = categoriesModel.connection.prepareStatement(query);
+            preparedStatement.setString(1, selected);
+            preparedStatement.setString(2, getLoggedUsername());
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                //Iterate Row
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                    //Iterate Column
+                    row.add(rs.getString(i));
+                }
+                data.add(row.toString());
+
+            }
+
+            List items = data;
+
+            items.forEach(item -> {
+                System.out.println(item);
+                String parts[] = item.toString().replaceAll("[\\[\\]]", "").replaceAll(",", "").split("\\s+");
+                String name = selected;
+                String description = parts[2];
+                String amount = parts[1];
+                Category category = null;
+
+                switch (parts.length) {
+                    case 2:
+                        category = new Category(name, amount);
+                        break;
+                    case 3:
+                        category = new Category(name, amount, description);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (category != null) {
+                    categories.add(category);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+        return categories;
+    }
+
+    public void createTableWithColumns() {
+        tableView.setEditable(true);
+        Callback<TableColumn<Category, String>, TableCell<Category, String>> cellFactory =
+                p -> new EditingCell();
+        Callback<TableColumn<Category, String>, TableCell<Category, String>> cellFactoryDouble =
+                p -> new EditingCell();
+        // second column init
+        columnAmount = new TableColumn<>("Amount");
+        columnAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        columnAmount.setCellFactory(cellFactoryDouble);
+        columnAmount.setOnEditCommit(
+                t -> (t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setName(t.getNewValue().toString())
+        );
+        columnAmount.setEditable(true);
+        //first column init
+        columnDescription = new TableColumn("Description");
+        columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        columnDescription.setCellFactory(cellFactory);
+        columnDescription.setOnEditCommit(
+                t -> (t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setName(t.getNewValue())
+        );
+        columnDescription.setEditable(true);
+
+        categoriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            // Your action here
+            tableView.setItems(getCategories(newValue));
+        });
+
+        tableView.getColumns().removeAll(columnAmount, columnDescription);
+        tableView.getColumns().addAll(columnAmount, columnDescription);
+    }
+
+    public void showUserParentCategories() {
+        ObservableList<String> data = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        String query = "SELECT category_name from t_categories where USER = ?";
+        try {
+            preparedStatement = categoriesModel.connection.prepareStatement(query);
+            preparedStatement.setString(1, getLoggedUsername());
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String substringRow;
+                List row = new ArrayList();
+                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                    row.add(resultSet.getString(i));
+                }
+                substringRow = row.toString().replaceAll("[\\[\\]]", "").replaceAll(",", " ");
+                data.add(substringRow);
+            }
+            categoriesListView.getItems().clear();
+            categoriesListView.getItems().addAll(data);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

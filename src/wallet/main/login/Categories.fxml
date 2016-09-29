@@ -14,7 +14,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="623.0" prefWidth="1007.0" styleClass="vbox-main" stylesheets="@ComplexApplication.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallet.main.login.CategoriesController">
+<?import java.net.URL?>
+<VBox prefHeight="623.0" prefWidth="1007.0" styleClass="vbox-main" stylesheets="@Categories.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallet.main.login.CategoriesController">
     <children>
       <BorderPane prefHeight="623.0" prefWidth="1017.0">
          <left>
@@ -33,7 +34,7 @@
                               <Font name="Verdana" size="15.0" />
                            </font>
                                     </Button>
-                                    <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="94.0" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-radius: 20; -fx-background-insets: 0, 1; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 ); -fx-text-fill: black;" text="Remove">
+                                    <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="94.0" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-radius: 20; -fx-background-insets: 0, 1; -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 ); -fx-text-fill: black;" text="Delete">
                                         <HBox.margin>
                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                         </HBox.margin>
@@ -68,7 +69,7 @@
                   </AnchorPane>
          </left>
          <center>
-                  <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="465.0" prefWidth="611.0" stylesheets="@ComplexApplication.css">
+                  <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="465.0" prefWidth="611.0" stylesheets="@Categories.css">
                       <children>
                   <BorderPane layoutY="38.0" prefHeight="492.0" prefWidth="645.0">
                      <center>
@@ -145,7 +146,7 @@
          <top>
             <HBox prefHeight="93.0" prefWidth="1526.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="userLbl" prefHeight="32.0" prefWidth="211.0" textFill="WHITE">
+                  <Label fx:id="userLbl" prefHeight="32.0" prefWidth="211.0" text="USER" textFill="WHITE">
                      <font>
                         <Font name="Verdana" size="18.0" />
                      </font>
@@ -154,4 +155,7 @@
          </top>
       </BorderPane>
     </children>
+    <stylesheets>
+        <URL value="@Categories.css" />
+    </stylesheets>
 </VBox>
