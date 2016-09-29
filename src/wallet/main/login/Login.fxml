@@ -39,30 +39,30 @@
             <Insets top="20.0" />
          </padding>
       </VBox>
-      <Label fx:id="isConnected" alignment="CENTER" layoutX="103.0" layoutY="254.0" prefHeight="27.0" prefWidth="405.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" styleClass="login-status" text="Please enter username and password" textFill="RED">
+      <Label fx:id="isConnected" alignment="CENTER" layoutX="103.0" layoutY="254.0" prefHeight="27.0" prefWidth="405.0" style="-fx-background-color: transparent; -fx-background-radius: 10;" styleClass="login-status" text="Please enter username and password" textFill="#00eeff">
          <font>
             <Font name="Verdana" size="15.0" />
          </font>
       </Label>
-      <Button layoutX="170.0" layoutY="304.0" mnemonicParsing="false" onAction="#LoginAction" prefHeight="28.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-radius: 50; -fx-background-insets: 0, 1; -fx-text-fill: black; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Login">
+      <Button layoutX="170.0" layoutY="304.0" mnemonicParsing="false" onAction="#LoginAction" prefHeight="28.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#0943a0, #9ffffd); -fx-background-radius: 50; -fx-background-insets: 0, 1; -fx-text-fill: black; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Login">
          <font>
-            <Font name="Verdana" size="14.0" />
+            <Font name="Verdana Bold" size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="300.0" layoutY="304.0" mnemonicParsing="false" onAction="#OpenAccountCreation" prefHeight="28.0" prefWidth="141.0" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%); -fx-background-radius: 50; -fx-text-fill: black; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Create Account">
+      <Button layoutX="300.0" layoutY="304.0" mnemonicParsing="false" onAction="#OpenAccountCreation" prefHeight="28.0" prefWidth="141.0" style="-fx-background-color: linear-gradient(#00eeff, #00eeff),radial-gradient(center 50% -40%, radius 200%, #00eeff 45%, #9ffffd 50%); -fx-background-radius: 50; -fx-text-fill: black; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Create Account">
          <font>
-            <Font name="Verdana" size="14.0" />
+            <Font name="Verdana Bold" size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="logoLabel" alignment="CENTER" layoutX="168.0" layoutY="54.0" prefHeight="48.0" prefWidth="274.0" style="-fx-background-color: #3fbcff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5);" text="Wally Save">
+      <Label fx:id="logoLabel" alignment="CENTER" layoutX="163.0" layoutY="59.0" prefHeight="48.0" prefWidth="274.0" style="-fx-background-color: #3fbcff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, black, 10, 0, 5, 5); -fx-opacity: 0.5;" text="Wally $ave">
          <font>
-            <Font name="Narkisim" size="30.0" />
+            <Font name="Verdana Bold" size="31.0" />
          </font>
       </Label>
    </children>
