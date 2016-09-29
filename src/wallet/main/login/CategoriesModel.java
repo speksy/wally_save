@@ -1,15 +1,18 @@
 package wallet.main.login;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,20 +33,21 @@ public class CategoriesModel {
         }
     }
 
-    public void showCategories(ListView<String> categoriesListView) {
+    public void showUserParentCategories(ListView<String> categoriesListView) {
         ObservableList<String> data = FXCollections.observableArrayList();
         PreparedStatement preparedStatement;
         ResultSet resultSet;
-        String query = "SELECT * from t_categories";
+        String query = "SELECT * from t_categories";//where user = ?
         try {
             preparedStatement = connection.prepareStatement(query);
+//            preparedStatement.setString(1, user);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String substringRow;
                 List row = new ArrayList();
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    row.add(resultSet.getString(i).toString());
+                    row.add(resultSet.getString(i));
                 }
                 substringRow = row.toString().replaceAll("[\\[\\]]", "").replaceAll(",", " ");
                 data.add(substringRow);
@@ -57,12 +61,37 @@ public class CategoriesModel {
 
     }
 
+    public boolean hasCategory(String category) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * FROM t_categories where category_name = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, category);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        } finally {
+            try {
+                preparedStatement.close();
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     //Add new category
     public void createParentCategory(String entry, ListView<String> categoriesListView) {
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatement2 = null;
         String superCategoryQuery = "INSERT INTO t_categories (category_name) VALUES (?)";
-        String subCategoryQuery = "INSERT INTO t_cat_reg (name,user) VALUES (?)";
+        String subCategoryQuery = "INSERT INTO t_cat_reg (name) VALUES (?)";
         try {
             preparedStatement = connection.prepareStatement(superCategoryQuery);
             preparedStatement2 = connection.prepareStatement(subCategoryQuery);
@@ -78,7 +107,7 @@ public class CategoriesModel {
 
 
                 categoriesListView.getItems().clear();
-                showCategories(categoriesListView);
+                showUserParentCategories(categoriesListView);
             } else {
                 System.out.println("Already exists.");
             }
@@ -108,7 +137,7 @@ public class CategoriesModel {
 
             //Clear the list
             categoriesListView.getItems().clear();
-            showCategories(categoriesListView);
+            showUserParentCategories(categoriesListView);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -170,30 +199,39 @@ public class CategoriesModel {
         return categories;
     }
 
-    public boolean hasCategory(String category) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        String query = "SELECT * FROM t_categories where category_name = ?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, category);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        } finally {
-            try {
-                preparedStatement.close();
-                resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public void createTableWithColumns(TableView<Category> tableView, TableColumn<Category, String> columnAmount, TableColumn<Category, String> columnDescription, ListView<String> categoriesListView) {
+        tableView.setEditable(true);
+        Callback<TableColumn<Category, String>, TableCell<Category, String>> cellFactory =
+                p -> new EditingCell();
+        Callback<TableColumn<Category, String>, TableCell<Category, String>> cellFactoryDouble =
+                p -> new EditingCell();
+        // second column init
+        columnAmount = new TableColumn<>("Amount");
+        columnAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        columnAmount.setCellFactory(cellFactoryDouble);
+        columnAmount.setOnEditCommit(
+                t -> (t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setName(t.getNewValue().toString())
+        );
+        columnAmount.setEditable(true);
+        //first column init
+        columnDescription = new TableColumn("Description");
+        columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        columnDescription.setCellFactory(cellFactory);
+        columnDescription.setOnEditCommit(
+                t -> (t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setName(t.getNewValue())
+        );
+        columnDescription.setEditable(true);
+
+        categoriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            // Your action here
+            tableView.setItems(getCategories(newValue));
+        });
+
+        tableView.getColumns().removeAll(columnAmount, columnDescription);
+        tableView.getColumns().addAll(columnAmount, columnDescription);
     }
-
-
 }

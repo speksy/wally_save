@@ -28,7 +28,7 @@ class EditingCell extends TableCell<Category, String> {
     public void cancelEdit() {
         super.cancelEdit();
 
-        setText((String) getItem());
+        setText(getItem());
         setGraphic(null);
     }
 
@@ -64,6 +64,6 @@ class EditingCell extends TableCell<Category, String> {
     }
 
     private String getString() {
-        return getItem() == null ? "" : getItem().toString();
+        return getItem() == null ? "" : getItem();
     }
 }

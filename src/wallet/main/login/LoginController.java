@@ -42,8 +42,9 @@ public class LoginController implements Initializable{
     public void LoginAction()throws IOException{
         try {
             if (loginModel.isLogin(txtUsername.getText(),txtPassword.getText())){
+                FXMLLoader loader = new FXMLLoader();
                 Stage primaryStage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("ComplexApplication_css.fxml"));
+                Parent root = loader.load(getClass().getResource("ComplexApplication_css.fxml"));
                 Scene scene = new Scene(root);
                 scene.getStylesheets().add(getClass().getResource("ComplexApplication.css").toExternalForm());
                 primaryStage.setScene(scene);
@@ -67,7 +68,6 @@ public class LoginController implements Initializable{
         primaryStage.setScene(scene);
 
         primaryStage.show();
-
     }
 
 
