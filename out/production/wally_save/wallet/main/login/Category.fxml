@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -14,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import java.net.URL?>
-<VBox prefHeight="623.0" prefWidth="1007.0" styleClass="vbox-main" stylesheets="@Categories.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallet.main.login.CategoriesController">
+<VBox prefHeight="623.0" prefWidth="1007.0" styleClass="vbox-main" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallet.main.login.CategoriesController">
     <children>
       <BorderPane prefHeight="623.0" prefWidth="1017.0">
          <left>
@@ -69,7 +69,7 @@
                   </AnchorPane>
          </left>
          <center>
-                  <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="465.0" prefWidth="611.0" stylesheets="@Categories.css">
+                  <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="465.0" prefWidth="611.0" stylesheets="@Category.css">
                       <children>
                   <BorderPane layoutY="38.0" prefHeight="492.0" prefWidth="645.0">
                      <center>
@@ -156,6 +156,6 @@
       </BorderPane>
     </children>
     <stylesheets>
-        <URL value="@Categories.css" />
+        <URL value="@Category.css" />
     </stylesheets>
 </VBox>

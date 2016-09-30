@@ -15,10 +15,10 @@ public class Categories extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Categories.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Category.fxml"));
 
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("Categories.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("Category.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.show();

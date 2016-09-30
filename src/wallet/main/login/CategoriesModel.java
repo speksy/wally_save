@@ -27,14 +27,19 @@ import java.util.List;
 public class CategoriesModel {
 
     Connection connection;
+    String user = "";
     public CategoriesModel() {
+        // todo add user
+
         connection = SqliteConnection.Connector();
         if (connection == null) {
             System.out.print("No db connection");
             System.exit(1);
         }
     }
-
+    public Connection getConnection(){
+        return this.connection;
+    }
 
 
     public boolean hasCategory(String category) {

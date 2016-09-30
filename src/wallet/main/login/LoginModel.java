@@ -1,5 +1,8 @@
 package wallet.main.login;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +39,6 @@ public class LoginModel {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, user);
             preparedStatement.setString(2, pass);
-
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return true;
@@ -44,6 +46,7 @@ public class LoginModel {
                 return false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         } finally {
             preparedStatement.close();

@@ -4,12 +4,17 @@ package wallet.main.login;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import org.sqlite.SQLiteConnection;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,6 +30,7 @@ public class CategoriesController implements Initializable {
     private TableColumn<Category, String> columnDescription;
     private TableColumn<Category, String> columnAmount;
 
+    private String username;
     @FXML
     private ListView<String> categoriesListView;
     @FXML
@@ -37,13 +43,47 @@ public class CategoriesController implements Initializable {
     private TextField addCategoryName;
     @FXML
     private Label userLbl;
-    @Override
 
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
-        showUserParentCategories();
+        setUsername(userLbl.getText());
+        showUserParentCategories(username,categoriesListView);
         addButton.setOnMouseClicked(event -> createParentCategory(addCategoryName.getText()));
         deleteButton.setOnMouseClicked(event -> deleteParentCategory());
         createTableWithColumns();
+    }
+    public void setUserLbl(String username) {
+        this.userLbl.setText(username);
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void showUserParentCategories(String user, ListView<String> categoriesListView) {
+        ObservableList<String> data = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        String query = "SELECT category_name from t_categories where user = ?";
+        try {
+            preparedStatement = categoriesModel.connection.prepareStatement(query);
+            preparedStatement.setString(1, user);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String substringRow;
+                List row = new ArrayList();
+                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                    row.add(resultSet.getString(i));
+                }
+                substringRow = row.toString().replaceAll("[\\[\\]]", "").replaceAll(",", " ");
+                data.add(substringRow);
+            }
+            categoriesListView.getItems().clear();
+            categoriesListView.getItems().addAll(data);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     //Add new category
     public void createParentCategory(String entry) {
@@ -68,7 +108,7 @@ public class CategoriesController implements Initializable {
 
 
                 categoriesListView.getItems().clear();
-                showUserParentCategories();
+                showUserParentCategories(username,categoriesListView);
             } else {
                 System.out.println("Already exists.");
             }
@@ -81,19 +121,19 @@ public class CategoriesController implements Initializable {
         }
     }
 
-    public void setUserToLabel(String user){
-        userLbl.setText(user);
+    public void GetUser(String user){
+        this.username = user;
     }
 
     public String getLoggedUsername(){
-        return userLbl.getText();
+        return username;
     }
     //Delete category button clicked
     public void deleteParentCategory() {
         PreparedStatement preparedStatement;
         String query = "DELETE category_name FROM t_categories where category_name = ? and user = ?";
         String query2 = "DELETE name FROM t_cat_reg where name = ? and user = ?";
-        String selected = categoriesListView.getSelectionModel().getSelectedItem().toString();
+        String selected = categoriesListView.getSelectionModel().getSelectedItem();
         try {
             preparedStatement = categoriesModel.connection.prepareStatement(query);
             preparedStatement.setString(1, selected);
@@ -108,7 +148,7 @@ public class CategoriesController implements Initializable {
 
             //Clear the list
             categoriesListView.getItems().clear();
-            showUserParentCategories();
+            showUserParentCategories(username, categoriesListView);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,35 +243,6 @@ public class CategoriesController implements Initializable {
             tableView.setItems(getCategories(newValue));
         });
 
-        tableView.getColumns().removeAll(columnAmount, columnDescription);
         tableView.getColumns().addAll(columnAmount, columnDescription);
     }
-
-    public void showUserParentCategories() {
-        ObservableList<String> data = FXCollections.observableArrayList();
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
-        String query = "SELECT category_name from t_categories where USER = ?";
-        try {
-            preparedStatement = categoriesModel.connection.prepareStatement(query);
-            preparedStatement.setString(1, getLoggedUsername());
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                String substringRow;
-                List row = new ArrayList();
-                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    row.add(resultSet.getString(i));
-                }
-                substringRow = row.toString().replaceAll("[\\[\\]]", "").replaceAll(",", " ");
-                data.add(substringRow);
-            }
-            categoriesListView.getItems().clear();
-            categoriesListView.getItems().addAll(data);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
