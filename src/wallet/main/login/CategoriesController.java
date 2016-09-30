@@ -46,8 +46,18 @@ public class CategoriesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setUsername(userLbl.getText());
+        //init loader from login for username
+        FXMLLoader loader2 = new FXMLLoader(getClass().getResource("Login.fxml"));
+        try {
+            loader2.load();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        LoginController loginController = loader2.getController();
+        setUsername(loginController.getUsername());
         showUserParentCategories(username,categoriesListView);
+
         addButton.setOnMouseClicked(event -> createParentCategory(addCategoryName.getText()));
         deleteButton.setOnMouseClicked(event -> deleteParentCategory());
         createTableWithColumns();
@@ -59,6 +69,8 @@ public class CategoriesController implements Initializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+
     public void showUserParentCategories(String user, ListView<String> categoriesListView) {
         ObservableList<String> data = FXCollections.observableArrayList();
         PreparedStatement preparedStatement;

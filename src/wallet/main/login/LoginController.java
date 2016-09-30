@@ -1,5 +1,7 @@
 package wallet.main.login;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,9 +30,16 @@ public class LoginController implements Initializable {
 
     @FXML
     private TextField txtPassword;
+    @FXML
 
+    public String getUsername() {
+        return username;
+    }
+
+    private String username;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         if (loginModel.isDbConnected()) {
             isConnected.setText("Please enter username and password:");
         } else {
@@ -41,24 +50,19 @@ public class LoginController implements Initializable {
     @FXML
     public void LoginAction() throws IOException {
         try {
-            if (loginModel.isLogin(txtUsername.getText(), txtPassword.getText())) {
-                setTxtUsername(txtUsername);
-                Parent root = null;
-                FXMLLoader loader2 = new FXMLLoader(getClass().getResource("Category.fxml"));
-                try {
-                    // TODO - this load the Category.fxml and next set user name cannot be set because init phase is completed
-                    root = loader2.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                CategoriesController categoriesController = loader2.getController();
-                categoriesController.setUserLbl(getTxtUsername());
+
+            if (loginModel.isLogin(txtUsername.getText(), txtPassword.getText())) {
+                //take username every time even it is wrong
+                username = txtUsername.getText();
+                FXMLLoader loader2 = new FXMLLoader(getClass().getResource("Category.fxml"));
+                Parent root = loader2.load();
                 Scene scene = new Scene(root);
                 scene.getStylesheets().add(getClass().getResource("Category.css").toExternalForm());
                 Stage primaryStage = new Stage();
                 primaryStage.setScene(scene);
                 primaryStage.show();
+
             } else {
                 isConnected.setText("Incorrect username or password. Try again: ");
             }
@@ -67,13 +71,6 @@ public class LoginController implements Initializable {
             e.printStackTrace();
         }
 
-    }
-    public void setTxtUsername(TextField txtUsername) {
-        this.txtUsername = txtUsername;
-    }
-
-    public String getTxtUsername() {
-        return txtUsername.getText();
     }
     @FXML
     public void OpenAccountCreation() throws IOException {

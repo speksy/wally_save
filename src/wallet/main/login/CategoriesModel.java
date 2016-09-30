@@ -27,9 +27,7 @@ import java.util.List;
 public class CategoriesModel {
 
     Connection connection;
-    String user = "";
     public CategoriesModel() {
-        // todo add user
 
         connection = SqliteConnection.Connector();
         if (connection == null) {
