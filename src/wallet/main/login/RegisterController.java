@@ -1,5 +1,9 @@
 package wallet.main.login;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.client.MongoCursor;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,11 +14,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class RegisterController implements Initializable {
@@ -36,44 +43,49 @@ public class RegisterController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (connectionModel.isDbConnected()) {
-            isConnected.setText("Connected");
-        } else {
-            isConnected.setText("Not Connected");
-        }
+
     }
+
     @FXML
-    public void RegisterAction(){
-        createUser();
-    }
-
-    public void createUser() {
-        PreparedStatement preparedStatement = null;
-        String query = "insert into T_USERS (username,password,email,age) VALUES (?,?,?,?)";
-
-        if (connectionModel.isDbConnected() && regPassword.getText().equals(regPassword2.getText())) {
-            try {
-                preparedStatement = connectionModel.connection.prepareStatement(query);
-                preparedStatement.setString(1, regUsername.getText());
-                preparedStatement.setString(2, regPassword.getText());
-                preparedStatement.setString(3, regEmail.getText());
-                preparedStatement.setString(4, regAge.getText());
-                preparedStatement.executeUpdate();
-                isConnected.setText("User" + regUsername.getText() + " was created. Please Login.");
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        } else {
-            isConnected.setText("Passwords must match.");
+    public void RegisterAction() {
+        try {
+            createUser();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    public void createUser() throws IOException {
+        // 1. Create user
+        BasicDBObject user_info = new BasicDBObject();
+        user_info.put("username", regUsername.getText());
+        user_info.put("password", regPassword.getText());
+        user_info.put("email", regEmail.getText());
+        user_info.put("age", regAge.getText());
+        user_info.put("isLoggedIn", false );
+        List<DBObject> userInfoList = new ArrayList<>();
+        userInfoList.add(user_info);
+        connectionModel.getCollection().insertMany(userInfoList);
+        closeCurrentWindow();
+        openLoginScreen();
 
     }
+    private void closeCurrentWindow(){
+        Window window = regUsername.getScene().getWindow();
+
+        if (window instanceof Stage){
+            ((Stage) window).close();
+        }
+    }
+    private void openLoginScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Stage primaryStage = new Stage();
+        Parent root = fxmlLoader.load(getClass().getResource("Login.fxml"));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("Login.css").toExternalForm());
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+
 }

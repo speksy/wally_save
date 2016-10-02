@@ -1,5 +1,10 @@
 package wallet.main.login;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -7,22 +12,17 @@ import java.sql.SQLException;
  * Created by SVT on 27.9.2016 г..
  */
 public class RegisterModel {
-    Connection connection;
+    private MongoCollection collection;
 
-    public RegisterModel() {
-        connection = SqliteConnection.Connector();
-        if (connection == null) {
-            System.out.println("connection not successful");
-            System.exit(1);
-        }
+    public RegisterModel(){
+        MongoClient mongo = new MongoClient("localhost", 27017);
+        MongoDatabase db = mongo.getDatabase("wally");
+
+        collection = db.getCollection("test", BasicDBObject.class);
     }
 
-    public boolean isDbConnected() {
-        try {
-            return !connection.isClosed();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public MongoCollection getCollection() {
+        return collection;
     }
+
 }
